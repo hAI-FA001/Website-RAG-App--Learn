@@ -7,6 +7,24 @@ function ChatInterface() {
 
     const messagesEndRef = useRef(null);
 
+    var accumulatedAnswer = "";
+
+    function updateLastMessage(current) {
+        // this will be the new history
+        const updatedHistory = [...current];
+        // last chat = bot message
+        const lastChatIdx = updatedHistory.length - 1;
+                
+        updatedHistory[lastChatIdx] = {
+            // keep all keys/properties
+            ...updatedHistory[lastChatIdx],
+            // except "text"
+            text: accumulatedAnswer
+        };
+
+        return updatedHistory;
+    };
+
     const scrollToBottom = () => {
         messagesEndRef.current?.scrolIntoView({
             behavior: "smooth"
@@ -28,9 +46,13 @@ function ChatInterface() {
             chatHistory: [...messages, userMessage],
             question: inputTxt
         }
+        const botMessage = {
+            text: "",
+            isBot: true
+        };
 
         // concat old messages + this new message
-        setMessages([...messages, userMessage]);
+        setMessages([...messages, userMessage, botMessage]);
         setInputTxt('');
 
         const res = await fetch("http://localhost:5000/handle-query", {
@@ -40,14 +62,24 @@ function ChatInterface() {
             },
             body: JSON.stringify(body)
         });
-
-        const data = await res.json();
-        const botMessage = {
-            text: data.answer,
-            isBot: true
-        };
         
-        setMessages(current => [...current, botMessage]);
+        if (!res.body) return;
+
+        // for streaming
+        let decoder = new TextDecoderStream();
+        const reader = res.body.pipeThrough(decoder).getReader();
+        accumulatedAnswer = "";
+
+        while (true) {
+            var { value, done } = await reader.read();
+
+            if (done) break;
+
+            accumulatedAnswer += value;
+
+            // set last bot message
+            setMessages(updateLastMessage);
+        }
     };
 
     return (
