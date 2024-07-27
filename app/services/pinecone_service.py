@@ -53,3 +53,7 @@ def get_similar_chunks(query, index_name):
     ]
     
     return ctxt_chunks
+
+def delete_index(index_name):
+    if index_name in pc.list_indexes():
+        pc.delete_index(name=index_name)
