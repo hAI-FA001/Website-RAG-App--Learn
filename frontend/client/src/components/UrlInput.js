@@ -49,7 +49,7 @@ function UrlInput({ onSubmit }) {
                     {loading ? "Building index..." : "Submit"}
                 </button>
             </form>
-            {resMsg && <p>resMsg</p>}
+            {resMsg && <p>{resMsg}</p>}
         </div>
     );
 }

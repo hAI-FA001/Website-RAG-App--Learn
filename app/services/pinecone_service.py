@@ -11,7 +11,7 @@ EMB_DIM = os.environ['EMB_DIM']
 pc = pinecone.Pinecone(api_key=PINECONE_API_KEY)
 
 def embed_and_upload(chunks, index_name):
-    if index_name in pc.list_indexes():
+    if index_name in pc.list_indexes().names():
         pc.delete_index(name=index_name)
     
     pc.create_index(

@@ -26,7 +26,7 @@ function ChatInterface() {
     };
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrolIntoView({
+        messagesEndRef.current?.scrollIntoView({
             behavior: "smooth"
         })
     };
