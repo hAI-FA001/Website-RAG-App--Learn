@@ -28,10 +28,11 @@ def build_prompt(query, ctxt_chunks):
     PROMPT_LIMIT = int(PROMPT_LIMIT)
 
     prompt_start = (
-        "Answer the question based on the given context. if you don't know" \
-        "the answer based on the provided context, just responsed with 'I don't know'." \
-        "Return just the answer and nothing else, do not add anything else." \
-        "Make sure your response is in markdown format." \
+        "Answer the question based on the given context. "\
+        "if you don't know the answer based on the provided context, just respond with 'I don't know'." \
+        "Return just the answer with markdown and nothing else, do not add anything else other than markdown." \
+        "Make the response extra beautiful by using markdown." \
+        "Make sure your response is in markdown format, it MUST be in markdown format." \
         "\n\nContext:\n"
     )
     prompt_end = (
