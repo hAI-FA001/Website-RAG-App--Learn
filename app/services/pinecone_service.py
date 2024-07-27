@@ -1,5 +1,5 @@
 import pinecone
-from DeployModelApp.app.services.model_service import get_embedding
+from app.services.model_service import get_embedding
 import os
 from dotenv import load_dotenv
 
@@ -16,8 +16,14 @@ def embed_and_upload(chunks, index_name):
     
     pc.create_index(
         name=index_name,
-        dimension=EMB_DIM,
-        metric='cosine'
+        dimension=int(EMB_DIM),
+        metric='cosine',
+        spec={
+            "serverless": {
+                "cloud": "aws",
+                "region": "us-east-1"
+            }
+        }
     )
     index = pc.Index(index_name)
 
@@ -36,7 +42,7 @@ def get_similar_chunks(query, index_name):
     
     idx = pc.Index(index_name)
     q_results = idx.query(
-        q_emb,
+        vector=q_emb,
         top_k=3,
         include_metadata=True
     )

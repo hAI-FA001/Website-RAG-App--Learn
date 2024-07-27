@@ -1,8 +1,6 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
-PROMPT_LIMIT = os.environ["PROMPT_LIMIT"]
 
 def make_chunks(text, ch_sz=200):
     sentences = text.split(". ")
@@ -25,6 +23,10 @@ def make_chunks(text, ch_sz=200):
     return chs
 
 def build_prompt(query, ctxt_chunks):
+    load_dotenv()
+    PROMPT_LIMIT = os.environ["PROMPT_LIMIT"]
+    PROMPT_LIMIT = int(PROMPT_LIMIT)
+
     prompt_start = (
         "Answer the question based on the given context. if you don't know" \
         "the answer based on the provided context, just responsed with 'I don't know'." \
