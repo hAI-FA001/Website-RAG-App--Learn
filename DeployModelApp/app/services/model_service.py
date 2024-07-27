@@ -2,11 +2,17 @@ import os
 import json
 import requests
 
+import google.generativeai as genai
 from dotenv import load_dotenv
 
 load_dotenv()
 
+GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 EMB_MODEL = os.environ["EMB_MODEL"]
+
+genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel("gemini-1.5-flash")
+
 
 def get_embedding(chunk):
     api_url = f"https://api-inference.huggingface.co/pipeline/feature-extraction/{EMB_MODEL}"
@@ -23,3 +29,7 @@ def get_embedding(chunk):
     })
 
     return res.json()
+
+def get_llm_answer(prompt):
+    res = model.generate_content(prompt)
+    return res.text

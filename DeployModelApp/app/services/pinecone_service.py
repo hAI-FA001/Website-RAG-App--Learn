@@ -30,3 +30,20 @@ def embed_and_upload(chunks, index_name):
                for id_, vec, text in embs_with_ids]
     
     index.upsert(upserts)
+
+def get_similar_chunks(query, index_name):
+    q_emb = get_embedding(query)
+    
+    idx = pc.Index(index_name)
+    q_results = idx.query(
+        q_emb,
+        top_k=3,
+        include_metadata=True
+    )
+
+    ctxt_chunks = [
+        x["metadata"]["chunk_text"]
+        for x in q_results["matches"]
+    ]
+    
+    return ctxt_chunks

@@ -1,11 +1,12 @@
 from . import api_blueprint
 from flask import request, jsonify
 from app.services import scraping_service, model_service, pinecone_service
-from app.utils.helper_functions import make_chunks
+from app.utils.helper_functions import make_chunks, build_prompt
 
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
 PINECONE_INDEX_NAME = os.environ['PINECONE_INDEX_NAME']
 
 @api_blueprint.route('/embed-and-store', methods=['POST'])
@@ -26,4 +27,12 @@ def embed_and_store():
 @api_blueprint.route('/handle-query', methods=['POST'])
 def handle_query():
     # embed user's query, find relevant docs from vector db, build prompt, send to LLM API
-    pass
+    q = request.json["question"]
+    
+    ctxt_chunks = pinecone_service.get_similar_chunks(q, PINECONE_INDEX_NAME)
+    prompt = build_prompt(q, ctxt_chunks)
+    ans = model_service.get_llm_answer(prompt)
+    return jsonify({
+        "question": q,
+        "answer": ans
+    })
