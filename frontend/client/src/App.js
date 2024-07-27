@@ -7,7 +7,7 @@ function App() {
 
   const handleUrlSubmitted = () => {
     setShowChat(true);
-  }
+  };
 
   useEffect(() => {
     return () => {
@@ -29,11 +29,11 @@ function App() {
         !showChat ? (
           <UrlInput onSubmit={handleUrlSubmitted} />
         ) : (
-            <ChatInterface />
+          <ChatInterface />
         )
       }
     </div>
-  )
+  );
 }
 
 export default App;
