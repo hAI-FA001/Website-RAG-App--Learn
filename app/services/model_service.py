@@ -5,6 +5,9 @@ import requests
 import google.generativeai as genai
 from dotenv import load_dotenv
 
+from app.utils.helper_functions import construct_messages_list, build_prompt
+
+
 load_dotenv()
 
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
@@ -30,6 +33,8 @@ def get_embedding(chunk):
 
     return res.json()
 
-def get_llm_answer(prompt):
-    res = model.generate_content(prompt)
-    return res.text
+def get_llm_answer(prompt, chat_history, stream=False):
+    messages = construct_messages_list(prompt, chat_history)
+    res = model.generate_content(messages, stream=stream)
+
+    return res if stream else res.text

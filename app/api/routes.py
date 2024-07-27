@@ -1,5 +1,5 @@
 from . import api_blueprint
-from flask import request, jsonify
+from flask import request, jsonify, Response, stream_with_context, json
 from app.services import scraping_service, model_service, pinecone_service
 from app.utils.helper_functions import make_chunks, build_prompt
 
@@ -28,14 +28,18 @@ def embed_and_store():
 def handle_query():
     # embed user's query, find relevant docs from vector db, build prompt, send to LLM API
     q = request.json["question"]
+    h = request.json["chatHistory"]
     
     ctxt_chunks = pinecone_service.get_similar_chunks(q, PINECONE_INDEX_NAME)
-    prompt = build_prompt(q, ctxt_chunks)
-    ans = model_service.get_llm_answer(prompt)
-    return jsonify({
-        "question": q,
-        "answer": ans
-    })
+    p = build_prompt(q, ctxt_chunks)
+
+
+    def generate():
+        ans = model_service.get_llm_answer(p, h, stream=True)
+        for chunk in ans:
+            yield chunk.text
+
+    return Response(stream_with_context(generate()))
 
 @api_blueprint.route('/delete-index', methods=['POST'])
 def delete_index():

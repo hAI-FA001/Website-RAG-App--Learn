@@ -58,3 +58,36 @@ def build_prompt(query, ctxt_chunks):
             )
     
     return prompt
+
+def construct_messages_list(prompt, chat_history):
+    messages = []
+    for message in chat_history:
+        if message["isBot"]:
+            messages.append({
+                "role": "model",
+                "parts": [
+                    {
+                        "text": message["text"]
+                    }
+                ]
+            })
+        else:
+            messages.append({
+                "role": "user",
+                "parts": [
+                    {
+                        "text": message["text"]
+                    }
+                ]
+            })
+    
+    messages.append({
+        "role": "user",
+        "parts": [
+            {
+                "text": prompt
+            }
+        ]
+    })
+
+    return messages
