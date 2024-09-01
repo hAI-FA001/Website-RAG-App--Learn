@@ -31,7 +31,8 @@ def build_prompt(query, ctxt_chunks):
         "Answer the question based on the given context. "\
         "if you don't know the answer based on the provided context, just respond with 'I don't know'." \
         "Return just the answer with markdown and nothing else, do not add anything else other than markdown." \
-        "Make the response extra beautiful by using markdown." \
+        "Make the response extra beautiful by using markdown. Add bullet points and add markdown headings." \
+        "Reformat the provided context to make it professional and appealing to read and look at." \
         "Make sure your response is in markdown format, it MUST be in markdown format." \
         "\n\nContext:\n"
     )

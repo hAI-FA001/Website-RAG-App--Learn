@@ -4,18 +4,26 @@ html {
   padding: 0;
 
   font-family: "Arial", sans-serif;
-  font-size: 12px;
+  font-size: 14px;
 
   height: 100%;
   width: 100%;
+
+  background-color: #444;
 }
 
 .chat-container {
   display: flex;
   flex-direction: column;
 
+  padding-bottom: 1em;
+
   height: 100vh;
   width: 100%;
+
+  background-color: #333;
+
+  position: relative;
 }
 
 .chat-header {
@@ -53,18 +61,16 @@ html {
 
   width: 90%;
   max-width: 900px;
+
+  position: sticky;
+  bottom: 2em;
+  left: 1em;
+  right: 1em;
 }
 
 input[type="text"] {
   flex-grow: 1;
 
-  padding: 10px;
-  margin-right: 10px;
-
-  border: 1px solide #ccc;
-  border-radius: 20px;
-}
-input[type="text"] {
   padding: 10px;
   margin-right: 10px;
 
@@ -78,8 +84,10 @@ button {
   margin-top: 20px;
   padding: 10px 15px;
 
+  width: 75%;
+
   border: none;
-  border-radius: 10%;
+  border-radius: 1em;
 
   background-color: #007bff;
   color: #fff;
@@ -87,8 +95,14 @@ button {
   cursor: pointer;
 }
 
+button:hover {
+  background-color: #5ca3f4;
+  color: #eef4fa;
+}
+
 button:disabled {
   background-color: #ccc;
+  color: gray;
   cursor: not-allowed;
 }
 
@@ -98,8 +112,11 @@ button:disabled {
   align-items: center;
 
   min-height: 100vh;
+  max-width: clamp(1em, 100%, 800px);
 
-  background-color: #f4f4f4;
+  margin: auto;
+
+  /* background-color: #f4f4f4; */
 }
 
 form {
@@ -140,7 +157,8 @@ form {
 }
 
 .bot-message {
-  background-color: lightgray;
+  background-color: #dcf;
+  color: #324;
 
   text-align: left;
 }

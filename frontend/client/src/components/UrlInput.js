@@ -38,6 +38,7 @@ function UrlInput({ onSubmit }) {
     return (
         <div className="urlinput">
             <form onSubmit={handleSubmit}>
+            <h1>Start by Providing a URL</h1>
                 <input
                     type="text"
                     placeholder="Enter URL"
